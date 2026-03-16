@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نور وسلام | دعوة للفرح الحقيقي</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Tajawal:wght@400;700&family=Amiri:wght@400;700&display=swap');
+        
+        :root {
+            --bg-deep: #020617; 
+            --bg-card: #0f172a; 
+            --primary-gold: #fbbf24; 
+            --gold-glow: rgba(251, 191, 36, 0.3);
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --accent-blue: #38bdf8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* إيقاف الـ scroll-behavior التلقائي لأنه يسبب قفزات غير مرغوبة مع الجافاسكربت */
+        html { scroll-behavior: auto; }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* الخلفية المتحركة */
+        .animated-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: floatOrb 15s infinite alternate ease-in-out;
+        }
+        .orb-1 { width: 300px; height: 300px; background: #0ea5e9; top: -50px; left: -50px; }
+        .orb-2 { width: 400px; height: 400px; background: #fbbf24; bottom: -100px; right: -50px; animation-delay: -5s; opacity: 0.2; }
+        .orb-3 { width: 250px; height: 250px; background: #8b5cf6; top: 40%; left: 40%; animation-delay: -10s; opacity: 0.15; }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, 50px) scale(1.1); }
+            100% { transform: translate(-30px, -20px) scale(0.9); }
+        }
+
+        /* الترويسة الزجاجية */
+        header {
+            background: rgba(2, 6, 23, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-gold);
+            cursor: pointer;
+            text-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        nav { display: flex; gap: 25px; }
+
+        nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            position: relative;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover { color: var(--primary-gold); }
+
+        /* حركات الانتقال الآمنة للصفحات */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.98); }
+        }
+
+        .page-section {
+            display: none; /* مخفي افتراضياً */
+            padding-top: 120px; /* لتعويض مساحة الترويسة */
+            padding-bottom: 60px;
+            min-height: 100vh;
+        }
+
+        .page-section.active {
+            display: block; /* ظاهر للقسم المفعل */
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .page-section.fading-out {
+            display: block;
+            animation: fadeOut 0.3s ease forwards;
+        }
+
+        /* حاويات المحتوى */
+        .content-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        .section-title {
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+            font-size: 3rem;
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        .section-subtitle {
+            text-align: center; font-size: 1.3rem; color: var(--text-muted); margin-bottom: 50px;
+        }
+
+        /* البطاقات الرئيسية */
+        .steps-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;
+        }
+
+        .step-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--primary-gold);
+            transform: scaleX(0); transition: transform 0.4s ease; transform-origin: right;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            background: rgba(30, 41, 59, 0.8);
+            border-color: var(--primary-gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px var(--gold-glow);
+        }
+
+        .step-card:hover::before { transform: scaleX(1); }
+        .step-icon { font-size: 3.5rem; margin-bottom: 20px; text-shadow: 0 0 15px rgba(255,255,255,0.2); }
+        .step-card h3 { color: #fff; font-size: 1.6rem; margin-bottom: 15px; font-family: 'Cairo', sans-serif; }
+        .step-card p { color: var(--text-muted); line-height: 1.7; font-size: 1.1rem; }
+
+        /* الصفحات الفرعية */
+        .detail-box {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 50px;
+            backdrop-filter: blur(15px);
+            margin-top: 20px;
+        }
+
+        .detail-text { font-size: 1.3rem; line-height: 2; color: #e2e8f0; margin-bottom: 30px; }
+        
+        .verse-quote {
+            background: rgba(251, 191, 36, 0.1);
+            border-right: 4px solid var(--primary-gold);
+            padding: 25px;
+            border-radius: 10px;
+            font-family: 'Amiri', serif;
+            font-size: 1.6rem;
+            color: var(--primary-gold);
+            margin: 30px 0;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .action-btn {
+            background-color: var(--primary-gold); color: var(--bg-deep); border: none;
+            padding: 15px 40px; border-radius: 50px; font-size: 1.2rem; font-family: 'Cairo', sans-serif;
+            font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px var(--gold-glow); transition: all 0.3s ease;
+        }
+
+        .action-btn:hover { transform: translateY(-3px) scale(1.05); background-color: #f59e0b; }
+
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: transparent; color: var(--text-muted); border: 1px solid var(--text-muted);
+            padding: 10px 25px; border-radius: 30px; cursor: pointer;
+            font-family: 'Cairo', sans-serif; font-size: 1.1rem; margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover { background: var(--text-muted); color: var(--bg-deep); }
+
+        /* استجابة الهواتف */
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 15px; }
+            nav { margin-top: 15px; flex-wrap: wrap; justify-content: center; gap: 15px; }
+            .section-title { font-size: 2.2rem; }
+            .detail-box { padding: 30px; }
+            .page-section { padding-top: 150px; } /* مساحة إضافية للهواتف بسبب حجم القائمة */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="animated-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <header>
+        <div class="logo" onclick="showPage('home')">نور وسلام</div>
+        <nav>
+            <a onclick="showPage('home')">الرئيسية</a>
+            <a onclick="showPage('gospel')">رسالة الفرح</a>
+            <a onclick="showPage('stories')">قصص النور</a>
+            <a onclick="showPage('next-steps')">كيف أبدأ؟</a>
+        </nav>
+    </header>
+
+    <section id="home" class="page-section active">
+        <div class="content-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 60vh;">
+            <div style="max-width: 800px;">
+                <h1 style="font-family: 'Cairo'; font-size: 4rem; color: #fff; margin-bottom: 20px; text-shadow: 0 5px 20px rgba(0,0,0,0.5);">نور يشرق في الظلمة</h1>
+                <p style="font-size: 1.5rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.8;">مهما كانت أثقال الحياة، هناك دعوة مفتوحة لك لتعيش بسلام يفوق العقل. اكتشف الرحلة نحو النور الحقيقي.</p>
+                <button class="action-btn" onclick="showPage('gospel')">ابدأ الرحلة الآن</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="gospel" class="page-section">
+        <div class="content-container">
+            <h2 class="section-title">الطريق إلى السلام الداخلي</h2>
+            <p class="section-subtitle">اختر أحد الأقسام أدناه لتقرأ المزيد وتكتشف عمق الرسالة.</p>
+            
+            <div class="steps-grid">
+                <div class="step-card" onclick="showPage('detail-love')">
+                    <div class="step-icon">❤️</div>
+                    <h3>محبة بلا شروط</h3>
+                    <p>انقر هنا لتقرأ عن محبة الله العظيمة لك وكيف خلقك لغاية رائعة.</p>
+                </div>
+                <div class="step-card" onclick="showPage('detail-sin')">
+                    <div class="step-icon">🧱</div>
+                    <h3>الجدار الفاصل</h3>
+                    <p>انقر هنا لتفهم سبب شعورنا بالفراغ، وما هو العائق بيننا وبين السلام.</p>
+                </div>
+                <div class="step-card" onclick="showPage('detail-bridge')">
+                    <div class="step-icon">✝️</div>
+                    <h3>الجسر العظيم</h3>
+                    <p>انقر هنا لتكتشف الحل الإلهي وكيف دفع المسيح الثمن ليصالحنا.</p>
+                </div>
+                <div class="step-card" onclick="showPage('detail-faith')">
+                    <div class="step-icon">🎁</div>
+                    <h3>عطية الإيمان</h3>
+                    <p>انقر هنا لتعرف كيف يمكنك استلام هذه النعمة المجانية وتغيير حياتك.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="detail-love" class="page-section">
+        <div class="content-container">
+            <button class="back-btn" onclick="showPage('gospel')">⟵ العودة للأقسام</button>
+            <h2 class="section-title">محبة بلا شروط</h2>
+            <div class="detail-box">
+                <p class="detail-text">نحن نعيش في عالم يقيس قيمتنا بما نملكه أو بما نفعله. إذا أخطأنا، نُرفض، وإذا نجحنا، نُقبل. لكن محبة الله مختلفة تماماً. الله الخالق لا ينظر إليك من خلال أخطائك أو ماضيك، بل ينظر إليك كأب محب يتوق لاحتضان ابنه.</p>
+                <div class="verse-quote">"لأَنَّهُ هكَذَا أَحَبَّ اللهُ الْعَالَمَ حَتَّى بَذَلَ ابْنَهُ الْوَحِيدَ..."</div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="action-btn" onclick="showPage('detail-sin')">الخطوة التالية: الجدار الفاصل</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="detail-sin" class="page-section">
+        <div class="content-container">
+            <button class="back-btn" onclick="showPage('gospel')">⟵ العودة للأقسام</button>
+            <h2 class="section-title">الجدار الفاصل</h2>
+            <div class="detail-box">
+                <p class="detail-text">إذا كان الله محباً إلى هذا الحد، فلماذا نشعر أحياناً بالبعد عنه؟ الإجابة تكمن في طبيعتنا. لقد اخترنا كبشر أن نمضي في طريقنا الخاص بعيداً عن وصايا الخالق. هذا الانفصال هو ما يسميه الكتاب المقدس "الخطية" والتي بنت جداراً ضخماً بيننا وبينه.</p>
+                <div class="verse-quote">"إِذِ الْجَمِيعُ أَخْطَأُوا وَأَعْوَزَهُمْ مَجْدُ اللهِ."</div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="action-btn" onclick="showPage('detail-bridge')">الخطوة التالية: الجسر العظيم</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="detail-bridge" class="page-section">
+        <div class="content-container">
+            <button class="back-btn" onclick="showPage('gospel')">⟵ العودة للأقسام</button>
+            <h2 class="section-title">الجسر العظيم</h2>
+            <div class="detail-box">
+                <p class="detail-text">لأن الله عادل، كان لا بد من دفع ثمن للخطية. تجسد الله في شخص يسوع المسيح، وعاش حياة بلا خطية ليأخذ مكاننا. على الصليب، حمل المسيح كل أوجاعنا، وبقيامته هدم جدار الخطيئة ليصبح هو الجسر الوحيد للعبور إلى النور.</p>
+                <div class="verse-quote">"وَلكِنَّ اللهَ بَيَّنَ مَحَبَّتَهُ لَنَا، لأَنَّهُ وَنَحْنُ بَعْدُ خُطَاةٌ مَاتَ الْمَسِيحُ لأَجْلِنَا."</div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="action-btn" onclick="showPage('detail-faith')">الخطوة الأخيرة: الإيمان</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="detail-faith" class="page-section">
+        <div class="content-container">
+            <button class="back-btn" onclick="showPage('gospel')">⟵ العودة للأقسام</button>
+            <h2 class="section-title">عطية الإيمان</h2>
+            <div class="detail-box">
+                <p class="detail-text">كيف نعبر هذا الجسر؟ الأمر لا يتطلب طقوساً أو مجهودات جسدية. الخلاص هو "هدية مجانية" تُنال بالإيمان المخلص. الإيمان هو الثقة الكاملة في أن ما فعله المسيح كان من أجلك أنت شخصياً.</p>
+                <div class="verse-quote">"لأَنَّكُمْ بِالنِّعْمَةِ مُخَلَّصُونَ، بِالإِيمَانِ... هُوَ عَطِيَّةُ اللهِ."</div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="action-btn" onclick="showPage('next-steps')">كيف أصلي وأبدأ؟</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="stories" class="page-section">
+        <div class="content-container">
+            <h2 class="section-title">قصص من النور</h2>
+            <div class="detail-box">
+                <h3 style="color: var(--primary-gold); margin-bottom: 10px; font-size: 1.5rem;">وداعاً لثقل الماضي</h3>
+                <p class="detail-text">"عندما فهمت أن الخلاص هو 'نعمة مجانية' تُنال بالإيمان فقط، سقط عن كتفي جبل من الأثقال. اليوم أنا أعيش حراً، أعبد الله عن حب وليس عن خوف."</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="next-steps" class="page-section">
+        <div class="content-container">
+            <h2 class="section-title">تحدث مع الله الآن</h2>
+            <div class="detail-box" style="text-align: center;">
+                <p class="detail-text">إذا كنت ترغب في قبول هذه الهدية، يمكنك أن تصلي كلمات مشابهة لهذه من كل قلبك:</p>
+                <p style="font-size: 1.6rem; color: var(--primary-gold); line-height: 2; font-weight: bold; margin: 30px 0; font-style: italic;">
+                    "يا رب، أنا أؤمن أنك تحبني. أعترف بأنني أحتاج إلى غفرانك. أؤمن أن يسوع المسيح مات من أجلي لكي يمنحني الحياة. أفتح لك باب قلبي الآن. املأني بروحك، وامنحني سلامك. آمين."
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function showPage(pageId) {
+            const activeSection = document.querySelector('.page-section.active');
+            const targetSection = document.getElementById(pageId);
+
+            // إذا نقر المستخدم على نفس الصفحة الفعالة حالياً، لا تفعل شيئاً
+            if (activeSection === targetSection) return;
+
+            if (activeSection) {
+                // تفعيل حركة الاختفاء
+                activeSection.classList.remove('active');
+                activeSection.classList.add('fading-out');
+                
+                // ننتظر 300 جزء من الثانية (وهو وقت اختفاء الصفحة القديمة)
+                setTimeout(() => {
+                    activeSection.classList.remove('fading-out');
+                    
+                    // رفع الشاشة للأعلى في اللحظة المخفية بالضبط لمنع القفز العشوائي
+                    window.scrollTo(0, 0);
+                    
+                    // إظهار الصفحة الجديدة
+                    targetSection.classList.add('active');
+                }, 300);
+            } else {
+                // إذا لم يكن هناك صفحة فعالة (مثل عند التحميل الأول)
+                window.scrollTo(0, 0);
+                targetSection.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
